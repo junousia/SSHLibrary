@@ -74,7 +74,7 @@ class PythonSSHClient(AbstractSSHClient):
         try:
             self.client.connect(self.config.host, self.config.port, username,
                                 password, key_filename=key_file,
-                                allow_agent=False, timeout=float(self.config.timeout))
+                                allow_agent=True, timeout=float(self.config.timeout))
         except paramiko.AuthenticationException:
             raise SSHClientException
 
@@ -84,6 +84,7 @@ class PythonSSHClient(AbstractSSHClient):
         if not transport:
             raise AssertionError("Connection not open")
         new_shell = transport.open_session()
+        paramiko.agent.AgentRequestHandler(new_shell)
         cmd.run_in(new_shell)
         return cmd
 

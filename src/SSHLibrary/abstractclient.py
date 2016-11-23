@@ -188,7 +188,8 @@ class AbstractSSHClient(object):
         :returns: The read output from the server.
         """
         username = self._encode(username)
-        self._verify_key_file(keyfile)
+        if keyfile:
+            self._verify_key_file(keyfile)
         try:
             self._login_with_public_key(username, keyfile, password)
         except SSHClientException:
